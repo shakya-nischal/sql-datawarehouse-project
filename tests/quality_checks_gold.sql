@@ -9,7 +9,7 @@ Script Purpose:
           - Referential integrity between fact and dimension tables.
           - Validation or relationships in the data model for analytical purposes.
 Usage Notes:
-    - Run these checks after data loading Silver layer.
+    - Run these checks after the Gold layer views have been created.
     - Investigate and resolve any discrepancies found during the checks.
 ======================================================================================
 */
