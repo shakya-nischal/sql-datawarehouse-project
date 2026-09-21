@@ -71,7 +71,7 @@ WHERE  prd_end_dt IS NULL; -- Filter out all historical data
 GO
 
 -- =============================================================================================================
--- Create Dimension: gold.fact_sales
+-- Create Fact: gold.fact_sales
 -- =============================================================================================================
 IF OBJECT_ID('gold.fact_sales', 'V') IS NOT NULL
     DROP VIEW gold.fact_sales;
