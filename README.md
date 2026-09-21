@@ -1,34 +1,62 @@
-# Data Warehouse and Analytics Project
+# SQL Server Data Warehouse & Analytics Project
 
-Welcome to the **Data Warehouse and Analytics Projects** repository!
-This project demonstrates a comprehensive data warehousing and analytics solution, from building a data warehouse to generating actionable insights. Designed as a portfolio project, it highlights industry best practices in data engineering and analytics.
+An end-to-end data warehousing project that integrates CRM and ERP data into a structured analytical model using **SQL Server and T-SQL**.
 
----
+The project implements a **Bronze → Silver → Gold** architecture covering raw data ingestion, data cleansing and transformation, source integration, dimensional modelling, and data-quality validation.
 
-## Project Requirements
-
-### Building the Data Warehouse (Data Engineering)
-
-#### Objective
-Develop a modern data warehouse using SQL Server to consolidate sales data, enabling analytical reporting and informed decision-making.
-
-#### Specifications
-- **Data Sources**: Import data from two source systems (ERP and CRM) provided as CSV files.
-- **Data Quality**: Cleanse and resolve data quality issues prior to analysis.
-- **Integration**: Combine both sources into a single, user-friendly data model designed for analytical queries.
-- **Scope**: Focus on the latest dataset only; historization of data is not required.
-- **Documentation**: Provide clear documentation fo the data model to support both business stakeholders and analytics teams.
+> **Project context:** This repository was developed as a guided learning project while studying data warehousing and SQL. I implemented and ran the solution locally using SQL Server in Docker on macOS, working through ETL, data-quality, integration, and dimensional-modelling concepts. I am continuing to extend the project with additional analytics and data-engineering features.
 
 ---
 
-### BI: Analytics & Reporting (Data Analytics)
+## Architecture
 
-#### Objective
-Develop SQL-based analytics to deliver detailed insights into:
-- **Customer Behavior**
-- **Product Performance**
-- **Sales Trends**
+![Data Warehouse Architecture](docs/architecture.drawio.png)
 
-These insights empower stakeholders with key business metrics, enabling strategic decision-making.
+The warehouse follows a three-layer architecture:
+
+### Bronze Layer — Raw Ingestion
+
+The Bronze layer preserves source data in its original structure.
+
+- Loads CRM and ERP data from CSV files.
+- Uses SQL Server `BULK INSERT`.
+- Performs full-refresh loading using `TRUNCATE`.
+- Records individual table and batch load durations.
+- Uses `TRY...CATCH` for load error handling.
+
+### Silver Layer — Cleaning & Transformation
+
+The Silver layer transforms the raw data into cleaned and standardised datasets.
+
+Transformations include:
+
+- Removing duplicate customer records with `ROW_NUMBER()`.
+- Trimming and standardising text values.
+- Normalising gender, marital status, country, and product-line values.
+- Handling invalid and missing dates.
+- Correcting missing or inconsistent sales and price values.
+- Extracting category and product identifiers from source keys.
+- Removing inconsistent identifier formats.
+- Deriving product end dates using the `LEAD()` window function.
+- Integrating data originating from CRM and ERP systems.
+
+### Gold Layer — Business-Ready Model
+
+The Gold layer exposes analytical views organised into a star-schema-style model:
+
+- `gold.dim_customers`
+- `gold.dim_products`
+- `gold.fact_sales`
+
+The dimensions combine and enrich information from multiple source systems, while the sales fact provides transactional measures linked through customer and product surrogate keys.
 
 ---
+
+## Data Flow
+
+![Data Flow Diagram](docs/data_flow_diagram.drawio.png)
+
+```text
+CRM CSV Files ──┐
+                ├──► Bronze ──► Silver ──► Gold ──► Analytics / Reporting
+ERP CSV Files ──┘
