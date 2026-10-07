@@ -117,6 +117,64 @@ Measures and attributes include:
 For complete Gold-layer definitions, see the [Data Dictionary](docs/data_catalog.md).
 
 ---
+## SQL Analytics
+
+With the Gold layer in place, I extended the project into SQL-based data analysis using the dimensional model as the analytical source.
+
+Rather than analysing the original CRM and ERP files directly, the queries work with the cleaned and integrated Gold-layer data. This helped me practise using a data warehouse in the way it would be consumed for reporting and business analysis.
+
+The analysis currently covers:
+
+### Database Exploration
+
+Exploring the structure of the analytical database, including:
+
+- Available tables and views
+- Column names and data types
+- Gold-layer dimensions and facts
+
+### Dimension Exploration
+
+Exploring key business dimensions to understand the available data, including:
+
+- Customer countries
+- Customer demographics
+- Product categories
+- Product subcategories
+- Product lines
+
+### Date Range Analysis
+
+Analysing the time coverage of the data, including:
+
+- First and last customer birth dates
+- Customer age ranges
+- First and last sales order dates
+- Available sales history
+
+### Measures Exploration
+
+Calculating high-level business measures such as:
+
+- Total sales
+- Total quantity sold
+- Average selling price
+- Number of orders
+- Number of products
+- Number of customers
+- Customers who have placed an order
+
+### Magnitude Analysis
+
+Comparing measures across different dimensions to understand how values are distributed, including:
+
+- Customers by country
+- Customers by gender
+- Products by category
+- Average product cost by category
+- Revenue by product category
+
+The analytical queries are available in the [`analytics/`](analytics/) directory.
 
 ## Data Quality & Validation
 
@@ -176,7 +234,14 @@ sql-datawarehouse-project/
 │   │   └── ddl_gold.sql
 │   │
 │   └── init_database.sql
-│
+├── analytics/
+│   ├── 00_init_database.sql
+│   ├── 01_exploratory_data_analysis.sql
+│   ├── 02_exploratory_dimensions.sql
+│   ├── 03_exploratory_dates.sql
+│   ├── 04_exploratory_measures.sql
+│   ├── 05_magnitude_analysis.sql
+│   └── ...
 ├── tests/
 │   ├── quality_checks_silver.sql
 │   └── quality_checks_gold.sql
@@ -225,6 +290,14 @@ sql-datawarehouse-project/
 - String transformations
 - Joins
 - Error handling with `TRY...CATCH`
+- `SUM()`
+- `AVG()`
+- `COUNT()`
+- `COUNT(DISTINCT)`
+- `MIN()` / `MAX()`
+- `DATEDIFF()`
+- `GROUP BY`
+- `ORDER BY`
 
 ---
 
@@ -250,16 +323,32 @@ The pipeline currently uses a full-refresh loading strategy for the Bronze and S
 
 ## Business Use Cases
 
-The resulting warehouse provides structured data that can support analysis of:
+The Gold layer provides a business-ready foundation for SQL analysis and reporting.
 
-- Sales trends
-- Customer behaviour
-- Product performance
-- Customer demographics
-- Geographic sales patterns
-- Product categories and subcategories
+The current analytical queries explore questions such as:
 
-The Gold layer acts as the reporting-facing layer for SQL analysis and can serve as a source for BI tools.
+- How much revenue has been generated?
+- How many customers have placed orders?
+- How are customers distributed across countries and genders?
+- Which product categories contain the most products?
+- What is the average product cost within each category?
+- Which product categories generate the most revenue?
+- What period of sales history is available?
+- What is the age range of the customer base?
+
+The Gold layer can also serve as a source for BI tools such as Power BI, allowing the same dimensional model to support dashboards and further analysis.
+
+### Data Analytics
+
+- Exploratory Data Analysis (EDA)
+- Business KPI Analysis
+- Dimension Analysis
+- Measure Analysis
+- Date Range Analysis
+- Magnitude Analysis
+- Aggregations
+- Grouping
+- Sorting and Ranking
 
 ---
 
@@ -278,21 +367,35 @@ Key areas of learning included:
 - Implementing data-quality checks between transformation stages
 - Running SQL Server in Docker on macOS
 
+As I extended the project into analytics, I also gained more practical experience with:
+
+- Exploring an unfamiliar dataset before beginning analysis
+- Translating business questions into SQL queries
+- Calculating KPIs from fact tables
+- Analysing measures across dimensions
+- Working with dates and analytical time ranges
+- Using aggregations and grouping to identify patterns in data
+- Using a dimensional model as the source for downstream analytics
+
 ---
 
 ## Future Improvements
 
-I plan to extend this project beyond the initial warehouse implementation with:
+The warehouse and analytics foundation is now in place. I plan to continue extending the project with:
 
+- More advanced SQL analysis using window functions
+- Ranking and Top-N analysis
+- Running totals and moving averages
+- Part-to-whole analysis
+- Customer and product segmentation
 - Power BI reporting connected to the Gold layer
 - DAX measures and analytical KPIs
 - ETL audit and logging tables
 - Improved automated data-quality checks
 - Incremental loading
 - Pipeline orchestration
-- Additional analytical SQL
 
-These extensions will build on the existing warehouse rather than replace the current architecture.
+These additions will continue to build on the existing warehouse and analytical model rather than replacing the current architecture.
 
 ---
 
@@ -311,11 +414,11 @@ Additional project documentation is available in the [`docs/`](docs/) directory:
 
 ## Acknowledgements
 
-This project was developed as a hands-on learning project based on the **Data Warehouse with SQL Server** tutorial by **Data with Baraa** on YouTube.
+This project was developed as a hands-on learning project based on the **SQL Data Warehouse and Data Analytics** learning material by **Data with Baraa** on YouTube.
 
-I followed the guided project to strengthen my understanding of data warehousing, ETL processes, data cleansing, dimensional modelling, and analytical SQL. I implemented and ran the project in my own local environment using **SQL Server in Docker on macOS**, while troubleshooting the setup, data-loading, and development workflow along the way.
+I followed the guided material to strengthen my understanding of data warehousing, ETL, data cleansing, dimensional modelling, data quality, and SQL analytics. I implemented and ran the project in my own local environment using **SQL Server in Docker on macOS**, troubleshooting the setup, data-loading process, SQL queries, and development workflow along the way.
 
-The repository also serves as a foundation for my continued independent development, including planned extensions in **Power BI, DAX, ETL auditing, data-quality automation, and incremental loading**.
+I am continuing to build on the project as part of my data engineering and analytics portfolio, with further work planned around advanced SQL analysis, Power BI, DAX, ETL auditing, data-quality automation, and incremental loading.
 
 ### Learning Resource
 
